@@ -17,7 +17,7 @@ export const loginUser = async (data: LoginValues) => {
     return { error: "Invalid credentials" };
 };
 
-export const registerUser = async (data: RegisterValues) => {
+export const registerUser = async () => {
     const cookieStore = await cookies();
     cookieStore.set('auth_session', 'my_secure_token', { httpOnly: true });
     return { success: true };
