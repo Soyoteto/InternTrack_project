@@ -34,7 +34,7 @@ The application is built using the following modern web stack:
 ## Project Structure
 
 Following the modular architecture requirements for the course, the code is organized within the src directory:
-
+```text
 src/
 ├── actions/        # Server Actions for database mutations and auth
 ├── app/            # Next.js App Router (Layouts, Pages, and Metadata)
@@ -42,6 +42,7 @@ src/
 ├── db/             # Database connection and Drizzle schema definitions
 ├── lib/            # Utility functions and shared logic
 └── modules/        # Domain-specific components (Application & User logic)
+```
 
 ## Getting Started
 
