@@ -54,3 +54,22 @@ export async function deleteApplication(id: number) {
     return { success: false, error: "Failed to delete application" };
   }
 }
+
+
+export async function getAllPlatformApplications() {
+  try {
+    const data = await db.select().from(applications);
+    
+    const totalApplications = data.length;
+    const acceptedCount = data.filter(app => app.status === 'Accepted').length;
+    
+    return { 
+      success: true, 
+      data, 
+      stats: { totalApplications, acceptedCount } 
+    };
+  } catch (error) {
+    console.error("Error in getAllPlatformApplications:", error);
+    return { success: false, error: "Failed to fetch all applications" };
+  }
+}

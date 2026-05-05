@@ -4,6 +4,12 @@ import { verifySession } from '@/actions/auth';
 import { getApplications } from '@/actions/application';
 import { ApplicationBoard } from '@/modules/application/components/application-board';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+};
+
 export default async function DashboardPage() {
     const user = await verifySession();
 

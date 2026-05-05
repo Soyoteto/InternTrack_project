@@ -9,7 +9,7 @@ import { useTransition } from 'react';
 import { loginSchema, type LoginValues } from './schema';
 import { loginUser } from '@/actions/auth';
 import { FormInput } from '@/components/form/form-input';
-import { SubmitButton } from '@/components/form/submit-button'; // To be created/adapted by role 3
+import { SubmitButton } from '@/components/form/submit-button';
 
 export const LoginForm = () => {
     const router = useRouter();
@@ -25,9 +25,13 @@ export const LoginForm = () => {
             const result = await loginUser(data);
             if (result?.error) {
                 toast.error(result.error);
-            } else {
+            } else if (result?.success) {
                 toast.success('Login successful!');
-                router.push('/dashboard');
+                if (result.role === 'admin') {
+                    router.push('/admin');
+                } else {
+                    router.push('/dashboard');
+                }
             }
         });
     };

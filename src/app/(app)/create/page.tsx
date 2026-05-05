@@ -5,6 +5,12 @@ import { createApplication } from "@/actions/application";
 import { verifySession } from "@/actions/auth";
 import { type ApplicationFormValues } from "@/modules/application/components/application-form/schema";
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'New Application',
+};
+
 export default async function CreatePage() {
   const user = await verifySession();
 

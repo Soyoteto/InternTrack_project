@@ -3,27 +3,28 @@ import { Poppins } from 'next/font/google';
 import { Toaster } from 'sonner';
 
 import './globals.css';
-
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '500', '600', '700'] });
 
 export const metadata: Metadata = {
-  title: 'InternTrack | Dashboard',
-  description: 'A centralized and intuitive tool to help students organize their internship or job search.'
+  title: {
+    template: '%s | InternTrack',
+    default: 'InternTrack - Internship Application Manager',
+  },
+  description: 'A centralized and intuitive web application to help students organize and track their internship and job searches effectively.',
+  keywords: ['internship', 'job tracker', 'application manager', 'student career', 'PV247'],
 };
 
-const RootLayout = ({
-  children
+export default function RootLayout({
+  children,
 }: Readonly<{
   children: React.ReactNode;
-}>) => {
+}>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} min-h-screen bg-slate-50 text-slate-900`}>
+      <body className={poppins.className}>
         {children}
-        <Toaster richColors position="top-center" />
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );
-};
-
-export default RootLayout;
+}

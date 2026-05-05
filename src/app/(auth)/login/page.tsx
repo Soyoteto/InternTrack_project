@@ -1,6 +1,13 @@
 import { LoginForm } from '@/modules/user/components/login-form/login-form';
 import Link from 'next/link';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Login',
+  description: 'Sign in to access your InternTrack dashboard.',
+};
+
 export default function LoginPage() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">

@@ -9,7 +9,7 @@ interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
-  ({ name, label, className, ...props }) => {
+  ({ name, label, className, ...props }, ref) => {
     const { register, formState: { errors } } = useFormContext();
     const error = errors[name]?.message as string | undefined;
 
