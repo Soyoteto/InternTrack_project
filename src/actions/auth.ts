@@ -6,6 +6,26 @@ import { db } from '@/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { type LoginValues } from '@/modules/user/components/login-form/schema';
+import { type RegisterFormValues } from '@/modules/user/components/register-form/schema';
+import crypto from 'crypto';
+
+export const registerUser = async (data: RegisterFormValues) => {
+    const existingUser = await db.select().from(users).where(eq(users.email, data.email));
+    
+    if (existingUser.length > 0) {
+        return { error: "Email already exists." };
+    }
+
+    await db.insert(users).values({
+        id: crypto.randomUUID(),
+        email: data.email,
+        password: data.password,
+        name: data.email.split('@')[0],
+        role: 'student',
+    });
+
+    return { success: true };
+};
 
 export const loginUser = async (data: LoginValues) => {
     const result = await db.select().from(users).where(eq(users.email, data.email));
@@ -45,7 +65,7 @@ export const verifySession = async () => {
 
     try {
         return JSON.parse(session);
-    } catch (error) {
+    } catch {
         return null;
     }
 };
