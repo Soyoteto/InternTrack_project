@@ -13,6 +13,8 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
     const { register, formState: { errors } } = useFormContext();
     const error = errors[name]?.message as string | undefined;
 
+    const { ref: formRef, ...formProps } = register(name);
+
     return (
       <div className="flex flex-col space-y-1.5 w-full">
         {label && (
@@ -23,7 +25,15 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         <Input
           id={name}
           className={cn(error && "border-red-500 focus:ring-red-500", className)}
-          {...register(name)}
+          {...formProps}
+          ref={(e) => {
+            formRef(e);
+            if (typeof ref === "function") {
+              ref(e);
+            } else if (ref) {
+              ref.current = e;
+            }
+          }}
           {...props}
         />
         {error && (
