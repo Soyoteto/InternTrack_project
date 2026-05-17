@@ -8,18 +8,18 @@ import { eq } from 'drizzle-orm';
 import { type LoginValues } from '@/modules/user/components/login-form/schema';
 import { type RegisterFormValues } from '@/modules/user/components/register-form/schema';
 import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
 
 export const registerUser = async (data: RegisterFormValues) => {
     const existingUser = await db.select().from(users).where(eq(users.email, data.email));
-    
-    if (existingUser.length > 0) {
-        return { error: "Email already exists." };
-    }
+    if (existingUser.length > 0) return { error: "Email already exists." };
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
     await db.insert(users).values({
         id: crypto.randomUUID(),
         email: data.email,
-        password: data.password,
+        password: hashedPassword,
         name: data.email.split('@')[0],
         role: 'student',
     });
@@ -31,22 +31,19 @@ export const loginUser = async (data: LoginValues) => {
     const result = await db.select().from(users).where(eq(users.email, data.email));
     const user = result[0];
 
-    if (!user || user.password !== data.password) {
-        return { error: "Invalid credentials. Please try again." };
-    }
+    if (!user) return { error: "Invalid credentials." };
+    
+    const isValidPassword = await bcrypt.compare(data.password, user.password);
+    if (!isValidPassword) return { error: "Invalid credentials, try again." };
+    if (user.isBanned) return { error: "Your account has been banned by an administrator." };
 
     const cookieStore = await cookies();
     const sessionData = JSON.stringify({ 
-        id: user.id, 
-        name: user.name, 
-        email: user.email, 
-        role: user.role 
+        id: user.id, name: user.name, email: user.email, role: user.role, isBanned: user.isBanned 
     });
     
     cookieStore.set('auth_session', sessionData, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 60 * 60 * 24 * 7
+        httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 60 * 60 * 24 * 7
     });
 
     return { success: true, role: user.role };
@@ -62,10 +59,5 @@ export const verifySession = async () => {
     const cookieStore = await cookies();
     const session = cookieStore.get('auth_session')?.value;
     if (!session) return null;
-
-    try {
-        return JSON.parse(session);
-    } catch {
-        return null;
-    }
+    try { return JSON.parse(session); } catch { return null; }
 };

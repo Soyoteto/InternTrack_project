@@ -8,7 +8,6 @@ export interface SubmitButtonProps extends ButtonProps {
   isPending?: boolean;
 }
 
-// A submit button that automatically disables itself and shows a loading state during form submission
 export const SubmitButton = ({ children, isPending, ...props }: SubmitButtonProps) => {
   const { formState: { isSubmitting } } = useFormContext();
 
