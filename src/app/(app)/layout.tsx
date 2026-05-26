@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { LayoutDashboard, PlusCircle, LogOut } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, LogOut, ChartColumnDecreasing } from 'lucide-react';
 
 import { verifySession, logoutUser } from '@/actions/auth';
 
@@ -30,26 +30,30 @@ export default async function AppLayout({ children }: PropsWithChildren) {
                 </div>
 
                 <nav className="flex-1 px-4 py-6 space-y-3">
-                    <Link 
-                        href="/dashboard" 
+                    <Link
+                        href="/dashboard"
                         className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100"
                     >
                         <LayoutDashboard size={20} />
                         Dashboard
                     </Link>
-                    <Link 
-                        href="/create" 
+                    <Link
+                        href="/create"
                         className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100"
                     >
                         <PlusCircle size={20} />
                         New Application
                     </Link>
+                    <Link href="/stats" className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100">
+                        <ChartColumnDecreasing size={20} />
+                        Analytics
+                    </Link>
                 </nav>
 
                 <div className="p-4 border-t-2 border-slate-200 bg-slate-50">
                     <form action={logoutUser}>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="flex items-center w-full gap-3 px-3 py-2 text-slate-900 font-bold rounded-md hover:bg-red-100 hover:text-red-700 transition-all border border-slate-200"
                         >
                             <LogOut size={20} />
@@ -64,15 +68,15 @@ export default async function AppLayout({ children }: PropsWithChildren) {
             </main>
 
             <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-slate-200 flex justify-around p-3 z-50">
-                <Link 
-                    href="/dashboard" 
+                <Link
+                    href="/dashboard"
                     className="flex flex-col items-center p-1 text-slate-900 font-bold hover:text-indigo-700"
                 >
                     <LayoutDashboard size={26} />
                     <span className="text-[11px] mt-1">Dashboard</span>
                 </Link>
-                <Link 
-                    href="/create" 
+                <Link
+                    href="/create"
                     className="flex flex-col items-center p-1 text-slate-900 font-bold hover:text-indigo-700"
                 >
                     <PlusCircle size={26} />
