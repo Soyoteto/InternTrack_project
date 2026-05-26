@@ -2,7 +2,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.local' });
 
-export default {
+const config = {
   schema: './src/db/schema.ts',
   out: './drizzle',
   driver: 'turso',
@@ -11,3 +11,4 @@ export default {
     authToken: process.env.TURSO_AUTH_TOKEN!,
   },
 };
+export default config;

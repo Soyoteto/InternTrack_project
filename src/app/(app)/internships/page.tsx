@@ -36,17 +36,35 @@ export default async function InternshipsPage() {
                             <form action={async (formData) => {
                                 "use server";
                                 await createInternship(formData);
-                            }} className="space-y-4">                                <div>
+                            }} className="space-y-4">
+                                <div>
                                     <label className="block text-sm font-medium text-indigo-900 mb-1">Company</label>
-                                    <input type="text" name="company" required placeholder="e.g. Spotify" className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                    <input
+                                        type="text"
+                                        name="company"
+                                        required
+                                        placeholder="e.g. Spotify"
+                                        className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 placeholder:text-slate-400 bg-white"
+                                    />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-indigo-900 mb-1">Position</label>
-                                    <input type="text" name="position" required placeholder="e.g. Backend Engineer Intern" className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                    <input
+                                        type="text"
+                                        name="position"
+                                        required
+                                        placeholder="e.g. Backend Engineer Intern"
+                                        className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 placeholder:text-slate-400 bg-white"
+                                    />
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-indigo-900 mb-1">Apply URL (Optional)</label>
-                                    <input type="url" name="url" placeholder="https://..." className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                                    <input
+                                        type="url"
+                                        name="url"
+                                        placeholder="https://..."
+                                        className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 placeholder:text-slate-400 bg-white"
+                                    />
                                 </div>
                                 <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
                                     Publish Offer
