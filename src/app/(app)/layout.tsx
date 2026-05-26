@@ -1,7 +1,7 @@
 import { type PropsWithChildren } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { LayoutDashboard, PlusCircle, LogOut, ChartColumnDecreasing } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, LogOut, ChartColumnDecreasing, MessageCircle } from 'lucide-react';
 
 import { verifySession, logoutUser } from '@/actions/auth';
 
@@ -47,6 +47,10 @@ export default async function AppLayout({ children }: PropsWithChildren) {
                     <Link href="/stats" className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100">
                         <ChartColumnDecreasing size={20} />
                         Analytics
+                    </Link>
+                    <Link href="/forum" className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100">
+                        <MessageCircle size={20}/>
+                        Forum
                     </Link>
                 </nav>
 
