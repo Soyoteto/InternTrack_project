@@ -1,9 +1,9 @@
-import { type PropsWithChildren } from 'react';
+import { ChartColumnDecreasing, Handshake, LayoutDashboard, LogOut, MessageCircle, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { LayoutDashboard, PlusCircle, LogOut, ChartColumnDecreasing, MessageCircle } from 'lucide-react';
+import { type PropsWithChildren } from 'react';
 
-import { verifySession, logoutUser } from '@/actions/auth';
+import { logoutUser, verifySession } from '@/actions/auth';
 
 export default async function AppLayout({ children }: PropsWithChildren) {
     const user = await verifySession();
@@ -49,8 +49,12 @@ export default async function AppLayout({ children }: PropsWithChildren) {
                         Analytics
                     </Link>
                     <Link href="/forum" className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100">
-                        <MessageCircle size={20}/>
+                        <MessageCircle size={20} />
                         Forum
+                    </Link>
+                    <Link href="/internships" className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100">
+                        <Handshake size={20} />
+                        Internships
                     </Link>
                 </nav>
 
