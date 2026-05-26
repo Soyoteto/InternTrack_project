@@ -33,8 +33,10 @@ export default async function InternshipsPage() {
                             <h2 className="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
                                 <PlusCircle size={20} /> Add New Offer
                             </h2>
-                            <form action={createInternship} className="space-y-4">
-                                <div>
+                            <form action={async (formData) => {
+                                "use server";
+                                await createInternship(formData);
+                            }} className="space-y-4">                                <div>
                                     <label className="block text-sm font-medium text-indigo-900 mb-1">Company</label>
                                     <input type="text" name="company" required placeholder="e.g. Spotify" className="w-full px-3 py-2 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
                                 </div>

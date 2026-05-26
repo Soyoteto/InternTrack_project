@@ -1,4 +1,4 @@
-import { ChartColumnDecreasing, Handshake, LayoutDashboard, LogOut, MessageCircle, PlusCircle } from 'lucide-react';
+import { ChartColumnDecreasing, Handshake, LayoutDashboard, LogOut, MessageCircle, Monitor, PlusCircle, UserPen } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { type PropsWithChildren } from 'react';
@@ -56,6 +56,18 @@ export default async function AppLayout({ children }: PropsWithChildren) {
                         <Handshake size={20} />
                         Internships
                     </Link>
+                    <Link href="/contact" className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100">
+                        <UserPen size={20} />
+                        Contact
+                    </Link>
+                    {user && user.role === 'admin' && (
+                        <a
+                            href="/admin"
+                            className="flex items-center gap-3 px-3 py-2 text-slate-900 font-semibold rounded-md hover:bg-indigo-50 hover:text-indigo-700 transition-all border border-transparent hover:border-indigo-100"                        >
+                            <Monitor size={20} />
+                            Admin Panel
+                        </a>
+                    )}
                 </nav>
 
                 <div className="p-4 border-t-2 border-slate-200 bg-slate-50">

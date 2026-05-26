@@ -1,31 +1,33 @@
 import { getAllPlatformApplications, deleteApplication } from "@/actions/application";
-import { getAllUsers, toggleBanStatus } from "@/actions/admin";
 import { logoutUser } from "@/actions/auth";
-import { LogOut, ShieldAlert, ShieldCheck, Trash2 } from "lucide-react";
+import { LogOut, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 export default async function AdminDashboard() {
   const appsResponse = await getAllPlatformApplications();
-  const usersResponse = await getAllUsers();
   
   const apps = appsResponse.data || [];
-  const usersList = usersResponse.data || [];
   const stats = appsResponse.stats || { totalApplications: 0, acceptedCount: 0 };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 py-10 px-4 md:px-8">
       <div className="max-w-5xl mx-auto space-y-10">
         
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-3xl font-extrabold text-indigo-950 mb-1">Admin Panel</h1>
             <p className="text-slate-500 font-medium">Global platform overview</p>
           </div>
-          <form action={logoutUser}>
-            <button type="submit" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-red-50 hover:text-red-600 transition-all shadow-sm">
-              <LogOut size={18} />
-              <span>Logout</span>
-            </button>
-          </form>
+          
+          <div className="flex items-center gap-3">
+            <Link href="/" className="...">Back to App</Link>
+            <form action={logoutUser}>
+              <button type="submit" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-red-50 hover:text-red-600 transition-all shadow-sm text-sm">
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
+            </form>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

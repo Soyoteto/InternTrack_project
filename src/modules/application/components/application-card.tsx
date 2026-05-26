@@ -93,7 +93,7 @@ export const ApplicationCard = ({ application }: { application: Application }) =
             {application.notes && (
                 <div className="mb-4 p-3 bg-slate-50 border border-slate-100 rounded-lg text-xs text-slate-600 flex items-start gap-2 flex-grow">
                     <FileText size={14} className="shrink-0 mt-0.5 text-slate-400" />
-                    <p className="line-clamp-3 italic">"{application.notes}"</p>
+                    <p className="line-clamp-3 italic">&quot;{application.notes}&quot;</p>
                 </div>
             )}
 

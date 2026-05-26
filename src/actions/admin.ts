@@ -23,7 +23,7 @@ export async function getAllUsers() {
         }).from(users);
         
         return { success: true, data: allUsers };
-    } catch (error) {
+    } catch  {
         return { success: false, error: "Failed to fetch users" };
     }
 }
@@ -46,7 +46,7 @@ export async function toggleBanStatus(userId: string, currentStatus: boolean) {
             
         revalidatePath('/admin');
         return { success: true };
-    } catch (error) {
+    } catch  {
         return { success: false, error: "Failed to update ban status" };
     }
 }

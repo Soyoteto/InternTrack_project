@@ -30,8 +30,10 @@ export default async function ForumPage() {
                 <div className="lg:col-span-1">
                     <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-6">
                         <h2 className="text-lg font-bold text-slate-900 mb-4">Start a Discussion</h2>
-                        <form action={createPost} className="space-y-4">
-                            <div>
+                        <form action={async (formData) => {
+                            "use server";
+                            await createPost(formData);
+                        }} className="space-y-4">                            <div>
                                 <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-1">Topic Title</label>
                                 <input
                                     type="text"
@@ -39,7 +41,7 @@ export default async function ForumPage() {
                                     name="title"
                                     required
                                     placeholder="e.g. Tips for Google Interview?"
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 placeholder:text-slate-400"
                                 />
                             </div>
                             <div>
@@ -50,7 +52,7 @@ export default async function ForumPage() {
                                     required
                                     rows={4}
                                     placeholder="Share your thoughts..."
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none text-slate-900 placeholder:text-slate-400"
                                 />
                             </div>
                             <button

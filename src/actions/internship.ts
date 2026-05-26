@@ -13,7 +13,7 @@ export async function getInternships() {
 
         const data = await db.select().from(internships).orderBy(desc(internships.createdAt));
         return { success: true, data };
-    } catch (error) {
+    } catch  {
         return { success: false, error: "Failed to fetch internships" };
     }
 }
@@ -40,7 +40,7 @@ export async function createInternship(formData: FormData) {
 
         revalidatePath('/internships');
         return { success: true };
-    } catch (error) {
+    } catch  {
         return { success: false, error: "Failed to create internship" };
     }
 }

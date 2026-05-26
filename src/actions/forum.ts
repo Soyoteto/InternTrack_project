@@ -24,7 +24,7 @@ export async function getPosts() {
             .orderBy(desc(posts.createdAt)); 
 
         return { success: true, data };
-    } catch (error) {
+    } catch  {
         return { success: false, error: "Failed to fetch posts" };
     }
 }
@@ -47,7 +47,7 @@ export async function createPost(formData: FormData) {
 
         revalidatePath('/forum');
         return { success: true };
-    } catch (error) {
+    } catch  {
         return { success: false, error: "Failed to create post" };
     }
 }

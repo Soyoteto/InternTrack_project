@@ -1,33 +1,32 @@
-import { redirect } from 'next/navigation';
-
-import { verifySession } from '@/actions/auth';
-import { getApplications } from '@/actions/application';
-import { ApplicationBoard } from '@/modules/application/components/application-board';
-
-import { Metadata } from 'next';
+import { redirect } from "next/navigation";
+import { verifySession } from "@/actions/auth";
+import { getApplications } from "@/actions/application";
+import DashboardClient from "./DashboardClient";
+import { LayoutDashboard } from "lucide-react";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Dashboard',
+  title: 'My Dashboard',
 };
 
 export default async function DashboardPage() {
-    const user = await verifySession();
+  const user = await verifySession();
+  if (!user) redirect("/login");
 
-    if (!user) {
-        redirect('/login');
-    }
+  const response = await getApplications(user.id);
+  const applications = response.data || [];
 
-    const result = await getApplications(user.id);
-    const applications = result.data || [];
+  return (
+    <div className="max-w-6xl mx-auto py-10 px-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-extrabold text-indigo-950 flex items-center gap-3">
+          <LayoutDashboard className="text-indigo-600" size={32} />
+          My Applications
+        </h1>
+        <p className="text-slate-500 mt-2 font-medium">Manage and track your job search progress.</p>
+      </div>
 
-    return (
-        <div className="flex flex-col gap-6">
-            <div>
-                <h1 className="text-3xl font-bold text-slate-900">My Applications</h1>
-                <p className="text-slate-700 font-medium mt-2">Track and manage your internship and job applications.</p>
-            </div>
-
-            <ApplicationBoard applications={applications} />
-        </div>
-    );
+      <DashboardClient applications={applications} />
+    </div>
+  );
 }
