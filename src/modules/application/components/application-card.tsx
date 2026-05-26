@@ -2,8 +2,9 @@
 
 import { useTransition } from 'react';
 import { toast } from 'sonner';
-import { Building2, Briefcase, Loader2, Link as LinkIcon, Mail, Calendar, FileText } from 'lucide-react';
+import { Building2, Briefcase, Loader2, Link as LinkIcon, Mail, Calendar, FileText, Pencil } from 'lucide-react';
 import { updateApplicationStatus } from '@/actions/application';
+import Link from 'next/link';
 
 type Application = {
     id: number;
@@ -45,7 +46,7 @@ export const ApplicationCard = ({ application }: { application: Application }) =
                     <Loader2 className="animate-spin text-indigo-600" size={24} />
                 </div>
             )}
-            
+
             <div className="flex justify-between items-start mb-3">
                 <div className="max-w-[70%]">
                     <h3 className="font-bold text-lg text-slate-900 flex items-center gap-2 truncate">
@@ -57,9 +58,18 @@ export const ApplicationCard = ({ application }: { application: Application }) =
                         {application.position}
                     </p>
                 </div>
-                <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${statusColors[application.status] || 'bg-slate-100 text-slate-800 border-slate-200'}`}>
-                    {application.status}
-                </span>
+                <div className="flex items-center gap-2">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${statusColors[application.status] || 'bg-slate-100 text-slate-800 border-slate-200'}`}>
+                        {application.status}
+                    </span>
+                    <Link
+                        href={`/edit/${application.id}`}
+                        className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all"
+                        title="Edit application"
+                    >
+                        <Pencil size={14} />
+                    </Link>
+                </div>
             </div>
 
             <div className="flex flex-col gap-1.5 mb-4">

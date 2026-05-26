@@ -113,3 +113,65 @@ export async function getAllPlatformApplications() {
     return { success: false, error: "Failed to fetch all applications" };
   }
 }
+
+  export async function getApplicationById(id: number) {
+  try {
+    const session = await verifySession();
+    if (!session) return { success: false, error: "Unauthorized" };
+
+    const result = await db.select().from(applications).where(eq(applications.id, id));
+    const app = result[0];
+
+    if (!app) return { success: false, error: "Application not found" };
+    
+    if (session.role !== 'admin' && app.userId !== session.id) {
+      return { success: false, error: "Unauthorized access" };
+    }
+
+    return { success: true, data: app };
+  } catch (error) {
+    return { success: false, error: "Failed to fetch application" };
+  }
+}
+
+export async function updateApplication(id: number, data: {
+  company: string;
+  position: string;
+  url?: string;
+  recruiterEmail?: string;
+  notes?: string;
+  followUpDate?: string;
+}) {
+  try {
+    const session = await verifySession();
+    if (!session || session.isBanned) return { success: false, error: "Unauthorized" };
+
+    const result = await db.select().from(applications).where(eq(applications.id, id));
+    const app = result[0];
+    if (!app) return { success: false, error: "Not found" };
+    if (session.role !== 'admin' && app.userId !== session.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    let parsedDate = null;
+    if (data.followUpDate) {
+      parsedDate = new Date(data.followUpDate);
+    }
+
+    await db.update(applications)
+      .set({
+        company: data.company,
+        position: data.position,
+        url: data.url || null,
+        recruiterEmail: data.recruiterEmail || null,
+        notes: data.notes || null,
+        followUpDate: parsedDate,
+      })
+      .where(eq(applications.id, id));
+
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: "Failed to update application" };
+  }
+}

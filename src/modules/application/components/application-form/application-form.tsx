@@ -11,16 +11,21 @@ interface ApplicationFormProps {
   onSubmitAction: (data: ApplicationFormValues) => Promise<void>;
 }
 
-export const ApplicationForm = ({ onSubmitAction }: ApplicationFormProps) => {
+interface ApplicationFormProps {
+  onSubmitAction: (data: ApplicationFormValues) => Promise<void>;
+  initialData?: Partial<ApplicationFormValues>;
+}
+
+export const ApplicationForm = ({ onSubmitAction, initialData }: ApplicationFormProps) => {
   const methods = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
-      company: "",
-      position: "",
-      url: "",
-      recruiterEmail: "",
-      notes: "",
-      followUpDate: "",
+      company: initialData?.company || "",
+      position: initialData?.position || "",
+      url: initialData?.url || "",
+      recruiterEmail: initialData?.recruiterEmail || "",
+      notes: initialData?.notes || "",
+      followUpDate: initialData?.followUpDate || "",
     },
   });
 
