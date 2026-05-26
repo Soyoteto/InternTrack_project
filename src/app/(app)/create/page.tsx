@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { createApplication } from "@/actions/application";
 import { verifySession } from "@/actions/auth";
 import { type ApplicationFormValues } from "@/modules/application/components/application-form/schema";
-
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -17,11 +16,14 @@ export default async function CreatePage() {
   if (!user) {
     redirect("/login");
   }
-
   const handleCreate = async (data: ApplicationFormValues) => {
     "use server";
-    await createApplication(data.company, data.position, user.id);
-    redirect("/dashboard");
+    const result = await createApplication(data);
+    if (result.success) {
+      redirect("/dashboard");
+    } else {
+      console.error("Erreur lors de la création :", result.error);
+    }
   };
 
   return (
@@ -29,7 +31,7 @@ export default async function CreatePage() {
       <h1 className="text-3xl font-extrabold mb-8 text-center text-slate-900 tracking-tight">
         Add New Application
       </h1>
-      <Card className="p-8 border-2 shadow-md">
+      <Card className="p-8 border-2 shadow-md bg-white">
         <ApplicationForm onSubmitAction={handleCreate} />
       </Card>
     </div>

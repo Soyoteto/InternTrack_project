@@ -20,20 +20,38 @@ export async function getApplications(userId: string) {
   }
 }
 
-export async function createApplication(company: string, position: string) {
+export async function createApplication(data: { 
+  company: string; 
+  position: string; 
+  url?: string; 
+  recruiterEmail?: string; 
+  notes?: string; 
+  followUpDate?: string 
+}) {
   try {
     const session = await verifySession();
     if (!session || session.isBanned) return { success: false, error: "Unauthorized" };
 
+    let parsedDate = null;
+    if (data.followUpDate) {
+      parsedDate = new Date(data.followUpDate);
+    }
+
     await db.insert(applications).values({
-      company,
-      position,
-      userId: session.id, 
+      company: data.company,
+      position: data.position,
+      userId: session.id,
       status: 'Pending',
+      url: data.url || null,
+      recruiterEmail: data.recruiterEmail || null,
+      notes: data.notes || null,
+      followUpDate: parsedDate,
     });
+    
     revalidatePath('/');
     return { success: true };
   } catch (error) {
+    console.error("Error creating application:", error);
     return { success: false, error: "Failed to create application" };
   }
 }
