@@ -28,25 +28,26 @@ export async function getAllUsers() {
     }
 }
 
-export async function toggleBanStatus(userId: string, currentStatus: boolean) {
+export async function toggleBanStatus(formData: FormData) {
+  try {
     const session = await verifySession();
-    
     if (!session || session.role !== 'admin') {
-        return { success: false, error: "Unauthorized" };
+      return { success: false, error: "Unauthorized" };
     }
+    const userId = formData.get('userId') as string;
+    if (!userId) return { success: false, error: "User ID missing" };
+    const targetUser = await db.select().from(users).where(eq(users.id, userId));
     
-    if (session.id === userId) {
-        return { success: false, error: "You cannot ban yourself." };
+    if (targetUser.length === 0) {
+      return { success: false, error: "User not found" };
     }
-
-    try {
-        await db.update(users)
-            .set({ isBanned: !currentStatus })
-            .where(eq(users.id, userId));
-            
-        revalidatePath('/admin');
-        return { success: true };
-    } catch  {
-        return { success: false, error: "Failed to update ban status" };
-    }
+    const newStatus = !targetUser[0].isBanned;
+    await db.update(users)
+      .set({ isBanned: newStatus })
+      .where(eq(users.id, userId));
+    revalidatePath('/admin');
+    return { success: true };
+  } catch {
+    return { success: false, error: "Failed to update ban status" };
+  }
 }

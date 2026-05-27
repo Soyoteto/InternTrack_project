@@ -1,13 +1,18 @@
+import { redirect } from "next/navigation";
 import { getAllPlatformApplications, deleteApplication } from "@/actions/application";
-import { logoutUser } from "@/actions/auth";
-import { LogOut, Trash2 } from "lucide-react";
+import { verifySession, logoutUser } from "@/actions/auth";
+import { getAllUsers, toggleBanStatus } from "@/actions/admin";
+import { LogOut, Trash2, ShieldCheck, User, Ban, Users } from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminDashboard() {
+  const currentUser = await verifySession();
+  if (!currentUser || currentUser.role !== 'admin') redirect("/");
   const appsResponse = await getAllPlatformApplications();
-
   const apps = appsResponse.data || [];
   const stats = appsResponse.stats || { totalApplications: 0, acceptedCount: 0 };
+  const usersResponse = await getAllUsers();
+  const usersList = usersResponse.data || [];
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 py-10 px-4 md:px-8">
@@ -20,7 +25,9 @@ export default async function AdminDashboard() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/" className="...">Back to App</Link>
+            <Link href="/" className="px-4 py-2 bg-indigo-50 text-indigo-700 font-semibold rounded-lg hover:bg-indigo-100 transition-all text-sm border border-indigo-100">
+              Back to App
+            </Link>
             <form action={logoutUser}>
               <button type="submit" className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-red-50 hover:text-red-600 transition-all shadow-sm text-sm">
                 <LogOut size={16} />
@@ -43,7 +50,7 @@ export default async function AdminDashboard() {
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-100 bg-white">
-            <h2 className="text-xl font-bold text-indigo-950">User Management</h2>
+            <h2 className="text-xl font-bold text-indigo-950">Platform Applications</h2>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -83,10 +90,65 @@ export default async function AdminDashboard() {
                     </td>
                   </tr>
                 ))}
+                {apps.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="p-6 text-center text-slate-500">No applications found on the platform.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </div>
+
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-100 bg-white">
+            <h2 className="text-xl font-bold text-indigo-950 flex items-center gap-2">
+              <Users size={24} className="text-indigo-600" /> User Management
+            </h2>
+          </div>
+          <div className="p-6">
+            <div className="grid gap-4">
+              {usersList.map((u) => (
+                <div key={u.id} className={`flex items-center justify-between p-4 rounded-xl border transition-colors ${u.isBanned ? 'bg-red-50 border-red-200' : 'bg-slate-50 border-slate-200 hover:border-indigo-200'}`}>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className={`p-2 rounded-full shrink-0 ${u.role === 'admin' ? 'bg-indigo-100 text-indigo-600' : 'bg-white border border-slate-200 text-slate-400'}`}>
+                      {u.role === 'admin' ? <ShieldCheck size={20} /> : <User size={20} />}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 flex items-center gap-2">
+                        {u.name} 
+                        {u.role === 'admin' && <span className="text-[10px] uppercase tracking-wider bg-indigo-600 text-white px-2 py-0.5 rounded-full">Admin</span>}
+                        {u.isBanned && <span className="text-[10px] uppercase tracking-wider bg-rose-600 text-white px-2 py-0.5 rounded-full flex items-center gap-1"><Ban size={10} /> Banned</span>}
+                      </p>
+                      <p className="text-sm text-slate-500">{u.email}</p>
+                    </div>
+                  </div>
+
+                  {u.id !== currentUser.id && (
+                    <form action={async (formData) => {
+                      "use server";
+                      await toggleBanStatus(formData);
+                    }}>
+                      <input type="hidden" name="userId" value={u.id} />
+                      <button 
+                        type="submit" 
+                        className={`px-4 py-2 text-sm font-bold rounded-lg transition-colors shadow-sm ${u.isBanned ? 'bg-white border border-emerald-200 text-emerald-700 hover:bg-emerald-50' : 'bg-white border border-rose-200 text-rose-700 hover:bg-rose-50'}`}
+                      >
+                        {u.isBanned ? 'Unban User' : 'Ban User'}
+                      </button>
+                    </form>
+                  )}
+                </div>
+              ))}
+              
+              {usersList.length === 0 && (
+                <p className="text-center text-slate-500 py-4">No users found.</p>
+              )}
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

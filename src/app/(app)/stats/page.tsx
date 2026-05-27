@@ -47,7 +47,7 @@ export default async function StatsPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 relative overflow-hidden">
-              <div className="bg-indigo-50 p-4 rounded-xl">
+              <div className="bg-blue-50 p-4 rounded-xl">
                 <Briefcase className="text-indigo-600" size={28} />
               </div>
               <div>
@@ -67,7 +67,7 @@ export default async function StatsPage() {
             </div>
 
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 relative overflow-hidden">
-              <div className="bg-emerald-50 p-4 rounded-xl">
+              <div className="bg-blue-50 p-4 rounded-xl">
                 <Award className="text-blue-600" size={28} />
               </div>
               <div>
