@@ -1,15 +1,14 @@
 import { redirect } from "next/navigation";
 import { verifySession } from "@/actions/auth";
-import { getPosts, createPost } from "@/actions/forum";
+import { getPosts } from "@/data/forum"; 
 import { MessageSquare, ShieldCheck, User } from "lucide-react";
 import { Metadata } from "next";
+import ForumForm from "./ForumForm";
 
 const formatDate = (dateData: Date | string | number | null | undefined) => {
     try {
         if (!dateData) return new Date().toLocaleDateString();
-        
         const parsedDate = new Date(dateData);
-        
         if (!isNaN(parsedDate.getTime())) {
             return parsedDate.toLocaleDateString();
         }
@@ -40,42 +39,10 @@ export default async function ForumPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
                 <div className="lg:col-span-1">
                     <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-6">
                         <h2 className="text-lg font-bold text-slate-900 mb-4">Start a Discussion</h2>
-                        <form action={async (formData) => {
-                            "use server";
-                            await createPost(formData);
-                        }} className="space-y-4">                            <div>
-                                <label htmlFor="title" className="block text-sm font-medium text-slate-700 mb-1">Topic Title</label>
-                                <input
-                                    type="text"
-                                    id="title"
-                                    name="title"
-                                    required
-                                    placeholder="e.g. Tips for Google Interview?"
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 placeholder:text-slate-400"
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="content" className="block text-sm font-medium text-slate-700 mb-1">Message</label>
-                                <textarea
-                                    id="content"
-                                    name="content"
-                                    required
-                                    rows={4}
-                                    placeholder="Share your thoughts..."
-                                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none text-slate-900 placeholder:text-slate-400"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
-                            >
-                                Post Message
-                            </button>
-                        </form>
+                        <ForumForm />
                     </div>
                 </div>
 
@@ -109,7 +76,6 @@ export default async function ForumPage() {
                         ))
                     )}
                 </div>
-
             </div>
         </div>
     );

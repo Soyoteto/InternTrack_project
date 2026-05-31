@@ -6,28 +6,6 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { verifySession } from './auth';
 
-export async function getAllUsers() {
-    const session = await verifySession();
-    
-    if (!session || session.role !== 'admin') {
-        return { success: false, error: "Unauthorized access" };
-    }
-
-    try {
-        const allUsers = await db.select({
-            id: users.id,
-            name: users.name,
-            email: users.email,
-            role: users.role,
-            isBanned: users.isBanned
-        }).from(users);
-        
-        return { success: true, data: allUsers };
-    } catch  {
-        return { success: false, error: "Failed to fetch users" };
-    }
-}
-
 export async function toggleBanStatus(formData: FormData) {
   try {
     const session = await verifySession();

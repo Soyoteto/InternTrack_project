@@ -3,8 +3,19 @@ import { verifySession } from "@/actions/auth";
 import { getInternships } from "@/data/internship"; 
 import { Briefcase, Building2, ExternalLink, PlusCircle } from "lucide-react";
 import { Metadata } from "next";
-
 import InternshipForm from "./InternshipForm";
+
+const formatDate = (dateData: Date | string | number | null | undefined) => {
+    try {
+        if (!dateData) return new Date().toLocaleDateString();
+        const parsedDate = new Date(dateData);
+        if (!isNaN(parsedDate.getTime())) {
+            return parsedDate.toLocaleDateString();
+        }
+    } catch {
+    }
+    return new Date().toLocaleDateString();
+};
 
 export const metadata: Metadata = {
     title: 'Internship Offers',
@@ -60,7 +71,7 @@ export default async function InternshipsPage() {
 
                                 <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-100">
                                     <p className="text-xs text-slate-400">
-                                        Added {offer.createdAt ? new Date(offer.createdAt).toLocaleDateString() : 'recently'}
+                                        Added {offer.createdAt ? formatDate(offer.createdAt) : 'recently'}
                                     </p>
 
                                     {offer.url ? (

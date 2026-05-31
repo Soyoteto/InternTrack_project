@@ -1,22 +1,20 @@
 "use client";
 
-import * as React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { applicationSchema, type ApplicationFormValues } from "./schema";
 import { FormInput } from "@/components/form/form-input";
 import { SubmitButton } from "@/components/form/submit-button";
+import { useRouter } from "next/navigation";
 
 interface ApplicationFormProps {
-  onSubmitAction: (data: ApplicationFormValues) => Promise<void>;
-}
-
-interface ApplicationFormProps {
-  onSubmitAction: (data: ApplicationFormValues) => Promise<void>;
+  onSubmitAction: (data: ApplicationFormValues) => Promise<{ success: boolean; error?: string }>;
   initialData?: Partial<ApplicationFormValues>;
 }
 
 export const ApplicationForm = ({ onSubmitAction, initialData }: ApplicationFormProps) => {
+  const router = useRouter();
+  
   const methods = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
@@ -29,9 +27,16 @@ export const ApplicationForm = ({ onSubmitAction, initialData }: ApplicationForm
     },
   });
 
+  const handleFormSubmit = async (data: ApplicationFormValues) => {
+      const result = await onSubmitAction(data);
+      if (result && result.success) {
+          router.push('/dashboard');
+      }
+  };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmitAction)} className="space-y-4">
+      <form onSubmit={methods.handleSubmit(handleFormSubmit)} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormInput name="company" label="Company Name" placeholder="Google, Meta, etc." />
           <FormInput name="position" label="Position" placeholder="Frontend Developer" />
@@ -53,7 +58,7 @@ export const ApplicationForm = ({ onSubmitAction, initialData }: ApplicationForm
           />
         </div>
         
-        <SubmitButton className="w-full">Create Application</SubmitButton>
+        <SubmitButton className="w-full">Save Application</SubmitButton>
       </form>
     </FormProvider>
   );

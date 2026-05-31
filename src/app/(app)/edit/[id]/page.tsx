@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { updateApplication } from "@/actions/application";
 import { getApplicationById } from "@/data/application";
 import { verifySession } from "@/actions/auth";
-import { type ApplicationFormValues } from "@/modules/application/components/application-form/schema";
 
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
     const user = await verifySession();
@@ -20,10 +19,7 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
     }
 
     const app = response.data;
-
-    const formattedDate = app.followUpDate
-        ? new Date(app.followUpDate).toISOString().split('T')[0]
-        : "";
+    const formattedDate = app.followUpDate ? new Date(app.followUpDate).toISOString().split('T')[0] : "";
 
     const initialData = {
         company: app.company,
@@ -34,13 +30,7 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
         followUpDate: formattedDate,
     };
 
-    const handleUpdate = async (formData: ApplicationFormValues) => {
-        "use server";
-        const result = await updateApplication(appId, formData);
-        if (result.success) {
-            redirect("/dashboard");
-        }
-    };
+    const updateAction = updateApplication.bind(null, appId);
 
     return (
         <div className="max-w-xl mx-auto mt-10">
@@ -48,7 +38,7 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
                 Edit Application
             </h1>
             <Card className="p-8 border-2 shadow-md bg-white">
-                <ApplicationForm onSubmitAction={handleUpdate} initialData={initialData} />
+                <ApplicationForm onSubmitAction={updateAction} initialData={initialData} />
             </Card>
         </div>
     );
