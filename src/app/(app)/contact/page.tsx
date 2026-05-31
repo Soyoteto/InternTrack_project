@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mail, Send, Loader2, Building2, CheckCircle2 } from "lucide-react";
+import { submitContactMessage } from "@/actions/contact";
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -14,14 +16,17 @@ export default function ContactPage() {
     setIsSuccess(false);
     const formData = new FormData(form);
     const company = formData.get("company") as string;
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const result = await submitContactMessage(formData);
     setIsSubmitting(false);
-    setIsSuccess(true);
-    toast.success(`Message successfully sent to ${company}!`);
-    form.reset();
-    setTimeout(() => setIsSuccess(false), 5000);
+    if (result.success) {
+      setIsSuccess(true);
+      toast.success(`Message successfully sent to ${company}!`);
+      form.reset();
+      setTimeout(() => setIsSuccess(false), 5000);
+    } else {
+      toast.error(result.error || "Failed to send message.");
+    }
   };
-
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">

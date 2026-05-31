@@ -4,6 +4,20 @@ import { getPosts, createPost } from "@/actions/forum";
 import { MessageSquare, ShieldCheck, User } from "lucide-react";
 import { Metadata } from "next";
 
+const formatDate = (dateData: Date | string | number | null | undefined) => {
+    try {
+        if (!dateData) return new Date().toLocaleDateString();
+        
+        const parsedDate = new Date(dateData);
+        
+        if (!isNaN(parsedDate.getTime())) {
+            return parsedDate.toLocaleDateString();
+        }
+    } catch {
+    }
+    return new Date().toLocaleDateString();
+};
+
 export const metadata: Metadata = {
     title: 'Community Forum',
 };
@@ -85,7 +99,7 @@ export default async function ForumPage() {
                                             )}
                                         </p>
                                         <p className="text-xs text-slate-400">
-                                            {post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Just now'}
+                                            {post.createdAt ? formatDate(post.createdAt) : 'Just now'}
                                         </p>
                                     </div>
                                 </div>

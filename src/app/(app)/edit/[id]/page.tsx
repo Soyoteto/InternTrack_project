@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { ApplicationForm } from "@/modules/application/components/application-form";
 import { Card } from "@/components/ui/card";
-import { getApplicationById, updateApplication } from "@/actions/application";
+import { updateApplication } from "@/actions/application";
+import { getApplicationById } from "@/data/application";
 import { verifySession } from "@/actions/auth";
 import { type ApplicationFormValues } from "@/modules/application/components/application-form/schema";
 

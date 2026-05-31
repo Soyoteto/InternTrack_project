@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { verifySession } from "@/actions/auth";
-import { getApplications } from "@/actions/application";
+import { getApplications } from "@/data/application";
 import { Target, TrendingUp, Briefcase, Award, AlertCircle } from "lucide-react";
 import { Metadata } from "next";
 

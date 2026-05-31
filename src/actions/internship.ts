@@ -2,21 +2,8 @@
 
 import { db } from '@/db';
 import { internships } from '@/db/schema';
-import { desc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { verifySession } from './auth';
-
-export async function getInternships() {
-    try {
-        const session = await verifySession();
-        if (!session) return { success: false, error: "Unauthorized" };
-
-        const data = await db.select().from(internships).orderBy(desc(internships.createdAt));
-        return { success: true, data };
-    } catch  {
-        return { success: false, error: "Failed to fetch internships" };
-    }
-}
 
 export async function createInternship(formData: FormData) {
     try {
