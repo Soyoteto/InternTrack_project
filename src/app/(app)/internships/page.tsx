@@ -3,7 +3,7 @@ import { verifySession } from "@/actions/auth";
 import { getInternships } from "@/data/internship"; 
 import { Briefcase, Building2, ExternalLink, PlusCircle } from "lucide-react";
 import { Metadata } from "next";
-import InternshipForm from "./InternshipForm";
+import InternshipForm from "@/modules/internship/components/internship-form/internship-form";
 
 const formatDate = (dateData: Date | string | number | null | undefined) => {
     try {

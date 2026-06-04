@@ -4,8 +4,8 @@ import { getAllUsers } from "@/data/admin";
 import { verifySession, logoutUser } from "@/actions/auth";
 import { LogOut, ShieldCheck, User, Ban, Users } from "lucide-react";
 import Link from "next/link";
-import DeleteAppButton from "./DeleteAppButton";
-import BanUserButton from "./BanUserButton";
+import BanUserButton from "@/modules/admin/components/ban-user-button";
+import DeleteAppButton from "@/modules/admin/components/delete-app-button";
 
 export default async function AdminDashboard() {
   const currentUser = await verifySession();

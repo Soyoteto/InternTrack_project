@@ -1,16 +1,21 @@
 "use client";
 
+import { useTransition } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { createInternship } from "@/actions/internship";
 import { FormInput } from "@/components/form/form-input"; 
 
 export default function InternshipForm() {
     const methods = useForm();
-    const handleAction = async (formData: FormData) => {
-        const result = await createInternship(formData);
-        if (result.success) {
-            methods.reset();
-        }
+    const [isPending, startTransition] = useTransition();
+
+    const handleAction = (formData: FormData) => {
+        startTransition(async () => {
+            const result = await createInternship(formData);
+            if (result.success) {
+                methods.reset();
+            }
+        });
     };
 
     return (
@@ -34,8 +39,13 @@ export default function InternshipForm() {
                     label="Apply URL (Optional)"
                     placeholder="https://..."
                 />
-                <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
-                    Publish Offer
+                
+                <button 
+                    type="submit" 
+                    disabled={isPending}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    {isPending ? "Publishing..." : "Publish Offer"}
                 </button>
             </form>
         </FormProvider>

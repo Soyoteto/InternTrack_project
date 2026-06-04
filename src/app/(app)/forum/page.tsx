@@ -3,7 +3,7 @@ import { verifySession } from "@/actions/auth";
 import { getPosts } from "@/data/forum"; 
 import { MessageSquare, ShieldCheck, User } from "lucide-react";
 import { Metadata } from "next";
-import ForumForm from "./ForumForm";
+import ForumForm from "@/modules/forum/components/forum-form/forum-form";
 
 const formatDate = (dateData: Date | string | number | null | undefined) => {
     try {
